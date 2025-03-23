@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.yjkj.framework.rbac.recharge.dao.RechargeDao">
+	<resultMap type="com.yjkj.framework.rbac.recharge.model.Recharge" id="rechargeMap">
+	<association property="userInfo" javaType="com.yjkj.framework.rbac.userInfo.model.UserInfo" column="user_id" select="com.yjkj.framework.rbac.userInfo.dao.UserInfoDao.queryOne"></association>
+	</resultMap>
+	<select id="informationLoad" parameterType="java.util.HashMap"
+		resultMap="rechargeMap">
+		SELECT
+		*
+		FROM
+		recharge 
+		<where>
+			<if test="recharge.user_id != null and recharge.user_id != ''">
+				user_id = #{recharge.user_id}
+			</if>
+		</where>
+		ORDER BY
+		id
+		DESC
+		LIMIT
+		#{pager.offSet},#{pager.pageSize}
+	</select>
+	<select id="informationLoadAll" parameterType="java.util.HashMap"
+		resultMap="rechargeMap">
+		SELECT
+		*
+		FROM
+		recharge 
+		ORDER BY
+		id
+		DESC
+	</select>
+	<select id="count" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		recharge
+		<where>
+			<if test="user_id != null and user_id != ''">
+				user_id = #{user_id}
+			</if>
+		</where>
+	</select>
+	<select id="informationLoadOne"  resultMap="rechargeMap">
+		SELECT
+		*
+		FROM
+		recharge
+		WHERE
+		id=#{id}
+	</select>
+
+
+	<delete id="informationDelete" >
+		DELETE
+		FROM
+		recharge
+		WHERE
+		id=#{id}
+	</delete>
+
+
+	<insert id="informationAdd" parameterType="com.yjkj.framework.rbac.recharge.model.Recharge">
+		INSERT INTO
+		recharge
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="money != null">
+				money,
+			</if>
+			<if test="user_id != null">
+				user_id,
+			</if>
+			<if test="recharge_type != null">
+				recharge_type,
+			</if>
+			<if test="createtime != null">
+				createtime,
+			</if>
+			<if test="flag != null">
+				flag,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="money != null">
+				#{money},
+			</if>
+			<if test="user_id != null">
+				#{user_id},
+			</if>
+			<if test="recharge_type != null">
+				#{recharge_type},
+			</if>
+			<if test="createtime != null">
+				#{createtime},
+			</if>
+			<if test="flag != null">
+				#{flag},
+			</if>
+		</trim>
+	</insert>
+	<update id="informationUpdate" parameterType="com.yjkj.framework.rbac.recharge.model.Recharge">
+		UPDATE
+		recharge
+		<set>
+			<if test="id != null">
+				id=#{id},
+			</if>
+			<if test="money != null">
+				money=#{money},
+			</if>
+			<if test="user_id != null">
+				user_id=#{user_id},
+			</if>
+			<if test="recharge_type != null">
+				recharge_type=#{recharge_type},
+			</if>
+			<if test="createtime != null">
+				createtime=#{createtime},
+			</if>
+			<if test="flag != null">
+				flag=#{flag},
+			</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+</mapper>

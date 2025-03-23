@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjkj.framework.rbac.userInfo.dao.UserInfoDao">
+<resultMap type="com.yjkj.framework.rbac.userInfo.model.UserInfo"
+		id="userMap">
+		<association property="roleInfo" javaType="com.yjkj.framework.rbac.roleInfo.model.RoleInfo" column="roleId" select="com.yjkj.framework.rbac.roleInfo.dao.RoleInfoDao.queryOne"></association>
+		<association property="vip" javaType="com.yjkj.framework.rbac.vip.model.Vip" column="vip_id" select="com.yjkj.framework.rbac.vip.dao.VipDao.informationLoadOne"></association>
+		<collection property="functionRoleRel" ofType="com.yjkj.framework.rbac.functionRoleInfo.model.FunctionRoleRel" column="roleId" select="com.yjkj.framework.rbac.functionRoleInfo.dao.FunctionRoleRelDao.query"></collection>
+	</resultMap>
+
+<select id="loginUser" resultMap="userMap">
+	SELECT
+		*
+	FROM
+		User_info
+	<where>
+		loginName=#{loginName}
+		AND
+		loginPassword=#{loginPassword}
+	</where>
+</select>
+<insert id="userAdd">
+
+	INSERT INTO
+		User_info
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test="id!=null and id!=''">
+			id,
+		</if>
+		<if test="loginName!=null and loginName!=''">
+			loginName,
+		</if>
+		<if test="loginPassword!=null and loginPassword!=''">
+			loginPassword,
+		</if>
+		<if test="userName!=null and userName!=''">
+			userName,
+		</if>
+		<if test="age!=null and age!=''">
+			age,
+		</if>
+		<if test="sex!=null and sex!=''">
+			sex,
+		</if>
+		<if test="address!=null and address!=''">
+			address,
+		</if>
+		<if test="url!=null and url!=''">
+			url,
+		</if>
+		<if test="vip_id!=null and vip_id!=''">
+			vip_id,
+		</if>
+		<if test="roleId!=null and roleId!=''">
+			roleId,
+		</if>
+		<if test="phoneNo!=null and phoneNo!=''">
+			phoneNo,
+		</if>
+		<if test="selfId!=null and selfId!=''">
+			selfId,
+		</if>
+		<if test="recommendId!=null and recommendId!=''">
+			recommendId,
+		</if>
+		<if test="remark!=null and remark!=''">
+			remark,
+		</if>
+		<if test="createDate!=null and createDate!=''">
+			createDate,
+		</if>
+		<if test="flag!=null and flag!=''">
+			flag,
+		</if>
+	</trim>
+	VALUES
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test="id!=null and id!=''">
+			#{id},
+		</if>
+		<if test="loginName!=null and loginName!=''">
+			#{loginName},
+		</if>
+		<if test="loginPassword!=null and loginPassword!=''">
+			#{loginPassword},
+		</if>
+		<if test="userName!=null and userName!=''">
+			#{userName},
+		</if>
+		<if test="age!=null and age!=''">
+			#{age},
+		</if>
+		<if test="sex!=null and sex!=''">
+			#{sex},
+		</if>
+		<if test="address!=null and address!=''">
+			#{address},
+		</if>
+		<if test="url!=null and url!=''">
+			#{url},
+		</if>
+		<if test="vip_id!=null and vip_id!=''">
+			#{vip_id},
+		</if>
+		<if test="roleId!=null and roleId!=''">
+			#{roleId},
+		</if>
+		<if test="phoneNo!=null and phoneNo!=''">
+			#{phoneNo},
+		</if>
+		<if test="selfId!=null and selfId!=''">
+			#{selfId},
+		</if>
+		<if test="recommendId!=null and recommendId!=''">
+			#{recommendId},
+		</if>
+		<if test="remark!=null and remark!=''">
+			#{remark},
+		</if>
+		<if test="createDate!=null and createDate!=''">
+			#{createDate},
+		</if>
+		<if test="flag!=null and flag!=''">
+			#{flag},
+		</if>
+	</trim>
+	
+</insert>
+<select id="queryOne" resultMap="userMap">
+	SELECT
+		*
+	FROM
+		User_info
+	<where>
+		id=#{id}
+	</where>
+</select>
+<select id="queryRole" resultMap="userMap">
+	SELECT
+		*
+	FROM
+		User_info
+	<where>
+		roleId=#{roleId}
+	</where>
+</select>
+<select id="Query" resultMap="userMap" parameterType="java.util.HashMap">
+	SELECT
+		*
+	FROM
+		User_info
+	<where>
+		<if test="user.roleId != null and user.roleId != ''">
+			roleId = #{user.roleId}
+		</if>
+		<if test="user.address != null and user.address != ''">
+			AND address LIKE CONCAT(CONCAT('%', #{user.address}), '%')
+		</if>
+		<if test="user.age != null and user.age != ''">
+			AND age LIKE CONCAT(CONCAT('%', #{user.age}), '%')
+		</if>
+		<if test="user.sex != null and user.sex != ''">
+			AND sex LIKE CONCAT(CONCAT('%', #{user.sex}), '%')
+		</if>
+	</where>
+	LIMIT 
+	#{pager.offSet},#{pager.pageSize}
+</select>
+<select id="queryAll" resultMap="userMap">
+	SELECT
+		*
+	FROM
+		User_info
+	<where>
+		<if test="roleId != null and roleId != ''">
+			roleId = #{roleId}
+		</if>
+		<if test="address != null and address != ''">
+			AND address LIKE CONCAT(CONCAT('%', #{address}), '%')
+		</if>
+		<if test="age != null and age != ''">
+			AND age LIKE CONCAT(CONCAT('%', #{age}), '%')
+		</if>
+		<if test="sex != null and sex != ''">
+			AND sex LIKE CONCAT(CONCAT('%', #{sex}), '%')
+		</if>
+	</where>
+</select>
+<select id="queryCount" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM
+		User_info
+	<where>
+		<if test="roleId != null and roleId != ''">
+			roleId = #{roleId}
+		</if>
+		<if test="address != null and address != ''">
+			AND address LIKE CONCAT(CONCAT('%', #{address}), '%')
+		</if>
+		<if test="age != null and age != ''">
+			AND age LIKE CONCAT(CONCAT('%', #{age}), '%')
+		</if>
+		<if test="sex != null and sex != ''">
+			AND sex LIKE CONCAT(CONCAT('%', #{sex}), '%')
+		</if>
+	</where>
+</select>
+
+
+
+<delete id="userDelete">
+		DELETE
+		FROM
+			User_info
+		WHERE
+			id=#{id}
+</delete>
+
+<update id="userUpdate" parameterType="com.yjkj.framework.rbac.userInfo.model.UserInfo">
+		UPDATE
+		User_info
+		<set>
+		<if test="loginName!=null and loginName!=''">
+			loginName=#{loginName},
+		</if>
+		<if test="loginPassword!=null and loginPassword!=''">
+			loginPassword=#{loginPassword},
+		</if>
+		<if test="userName!=null and userName!=''">
+			userName=#{userName},
+		</if>
+		<if test="age!=null and age!=''">
+			age=#{age},
+		</if>
+		<if test="sex!=null and sex!=''">
+			sex=#{sex},
+		</if>
+		<if test="address!=null and address!=''">
+			address=#{address},
+		</if>
+		<if test="url!=null and url!=''">
+			url=#{url},
+		</if>
+		<if test="vip_id!=null and vip_id!=''">
+			vip_id=#{vip_id},
+		</if>
+		<if test="roleId!=null and roleId!=''">
+			roleId=#{roleId},
+		</if>
+		<if test="phoneNo!=null and phoneNo!=''">
+			phoneNo=#{phoneNo},
+		</if>
+		<if test="selfId!=null and selfId!=''">
+			selfId=#{selfId},
+		</if>
+		<if test="recommendId!=null and recommendId!=''">
+			recommendId=#{recommendId},
+		</if>
+		<if test="remark!=null and remark!=''">
+			remark=#{remark},
+		</if>
+		<if test="createDate!=null and createDate!=''">
+			createDate=#{createDate},
+		</if>
+		<if test="flag!=null and flag!=''">
+			flag=#{flag},
+		</if>
+		</set>
+		WHERE id=#{id}
+</update>
+</mapper>
